@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
       - name: 获取上游源码并应用汉化补丁
         run: |
           git clone --depth 1 https://github.com/ashemag/human-atlas atlas
@@ -56,9 +56,9 @@ jobs:
       - name: Xcode 打包未签名 IPA
         run: |
           cd atlas/ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -archivePath build/App.xcarchive archive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          xcodebuild -project App.xcodeproj -target App -configuration Release -sdk iphoneos SYMROOT=build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
           mkdir -p Payload
-          cp -R build/App.xcarchive/Products/Applications/App.app Payload/
+          cp -R build/Release-iphoneos/App.app Payload/
           zip -qry ../../human-atlas-ios-unsigned.ipa Payload
       - uses: actions/upload-artifact@v4
         with:
