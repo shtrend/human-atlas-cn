@@ -26,6 +26,8 @@ jobs:
           npm install --no-audit --no-fund
           npm run build
           npx cap sync android
+      - name: 移除与 .gz 重复的原始模型资源（避免 aapt2 Duplicate resources）
+        run: find atlas/android/app/src/main/assets/public -name '*.bin' -delete
       - name: 打包 debug APK（可直接安装）
         run: |
           cd atlas/android
